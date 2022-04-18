@@ -1,0 +1,7 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.FakeDefenderAndroid" parent="XUITheme.Phone">
+        <item name="colorPrimary">@color/xui_config_color_main_theme</item>
+        <item name="colorAccent">@color/xui_config_color_main_theme</item>
+    </style>
+</resources>

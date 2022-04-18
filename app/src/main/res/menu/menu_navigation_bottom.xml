@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--底部导航栏-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_monitor"
+        android:icon="@drawable/ic_menu_monitor"
+        android:title="@string/menu_monitor" />
+
+    <item
+        android:id="@+id/nav_tools"
+        android:icon="@drawable/ic_menu_upload"
+        android:title="@string/menu_upload" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_menu_settings"
+        android:title="@string/menu_settings" />
+
+</menu>

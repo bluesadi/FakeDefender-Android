@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="25dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/layout_logo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                app:srcCompat="@drawable/ic_logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="FakeDefender"
+                android:textColor="@color/colorAccent"
+                android:textSize="32sp" />
+
+            <TextView
+                android:id="@+id/tx_running_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/running_time"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tx_last_running_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/last_running_time"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <!-- Monitor Panel -->
+
+        <LinearLayout
+            android:id="@+id/layout_monitor_panel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="250dp">
+
+                    <com.xuexiang.xui.widget.progress.loading.RotateLoadingView
+                        android:id="@+id/auto_arc_loading"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_gravity="center"
+                        app:lv_width="18dp"
+                        app:lv_has_icon="false" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tx_score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="65dp"
+                            android:text="0"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="48sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/risk_score"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="28sp" />
+
+                    </LinearLayout>
+
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tx_monitor_hour"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:textSize="30sp"
+                            android:text="@string/double_zero"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:textSize="16sp"
+                            android:text="@string/hour"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tx_monitor_minute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:textSize="30sp"
+                            android:text="@string/double_zero"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:textSize="16sp"
+                            android:text="@string/minute"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tx_monitor_second"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:textSize="30sp"
+                            android:text="@string/double_zero"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:textSize="16sp"
+                            android:text="@string/second"
+                            android:layout_gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 按钮区 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <com.xuexiang.xui.widget.button.roundbutton.RoundButton
+                android:id="@+id/btn_start_monitor"
+                style="@style/RoundButton.Auto"
+                android:layout_marginHorizontal="25dp"
+                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/start_monitor"
+                android:textSize="16sp"
+                android:textColor="@color/xui_default_round_btn_white_text"
+                app:rb_radius="15dp"
+                app:rb_backgroundColor="@color/xui_round_btn_green_bg"
+                app:rb_borderColor="@color/xui_round_btn_green_bg" />
+
+            <com.xuexiang.xui.widget.button.roundbutton.RoundButton
+                android:id="@+id/btn_stop_monitor"
+                android:visibility="gone"
+                style="@style/RoundButton.Auto"
+                android:layout_marginHorizontal="25dp"
+                android:layout_height="42dp"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/stop_monitor"
+                android:textSize="16sp"
+                android:textColor="@color/xui_default_round_btn_white_text"
+                app:rb_radius="15dp"
+                app:rb_backgroundColor="@color/xui_round_btn_red_bg"
+                app:rb_borderColor="@color/xui_round_btn_red_bg" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
