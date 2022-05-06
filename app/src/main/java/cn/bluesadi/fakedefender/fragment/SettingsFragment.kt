@@ -33,6 +33,7 @@ class SettingsFragment : BaseHomeFragment<FragmentSettingsBinding>() {
         viewPagerSettings.apply {
             adapter = FragmentAdapter<BaseTabFragment>(childFragmentManager).apply {
                 addFragment(GeneralSettingsFragment(), getString(R.string.general_settings))
+                addFragment(AlarmSettingsFragment(), getString(R.string.alarm_settings))
                 addFragment(SceneSettingsFragment(), getString(R.string.scene_settings))
             }
         }

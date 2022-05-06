@@ -1,13 +1,16 @@
 package cn.bluesadi.fakedefender.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.base.BaseActivity
+import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.databinding.ActivityMainBinding
 import cn.bluesadi.fakedefender.fragment.MonitorFragment
 import cn.bluesadi.fakedefender.fragment.SettingsFragment
 import cn.bluesadi.fakedefender.fragment.UploadFragment
+import cn.bluesadi.fakedefender.util.Screenshot
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**

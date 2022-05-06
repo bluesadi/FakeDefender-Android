@@ -72,5 +72,8 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.2.1'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 }

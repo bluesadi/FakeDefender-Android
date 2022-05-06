@@ -8,19 +8,23 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import cn.bluesadi.fakedefender.base.BaseTabFragment
 import cn.bluesadi.fakedefender.databinding.FragmentMonitorMainBinding
-import cn.bluesadi.fakedefender.face.MonitorManager
+import cn.bluesadi.fakedefender.core.MonitorManager
 import com.xuexiang.xui.widget.button.roundbutton.RoundButton
 import java.lang.ref.WeakReference
 import android.view.animation.AccelerateDecelerateInterpolator
-
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.widget.ImageView
-import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.data.Config
 import cn.bluesadi.fakedefender.util.TimeUtil
-import org.w3c.dom.Text
-import java.lang.ref.Reference
-import java.sql.Time
+import android.content.Intent
+import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.media.projection.MediaProjectionManager
+import androidx.activity.result.contract.ActivityResultContracts
+import cn.bluesadi.fakedefender.R
+import cn.bluesadi.fakedefender.util.Screenshot
+import cn.bluesadi.fakedefender.util.ToastUtil
 
 
 class MonitorMainFragment : BaseTabFragment() {
@@ -52,7 +56,7 @@ class MonitorMainFragment : BaseTabFragment() {
     }
 
     fun updateScore(score: Int){
-
+        txScore.text = "%d".format(score)
     }
 
     fun updateLastRunningTime(){
@@ -121,8 +125,7 @@ class MonitorMainFragment : BaseTabFragment() {
 
     override fun initListeners() {
         btnStartMonitor.setOnClickListener {
-            setRunningMode(true)
-            MonitorManager.startMonitor()
+            launchMonitor()
         }
         btnStopMonitor.setOnClickListener {
             setRunningMode(false)
@@ -130,5 +133,26 @@ class MonitorMainFragment : BaseTabFragment() {
         }
     }
 
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // There are no request codes
+            val data: Intent? = result.data
+            data?.let {
+                setRunningMode(true)
+                MonitorManager.startMonitor(Screenshot(data))
+            }
+        }
+    }
+
+    /**
+     * 动态请求屏幕截图的权限
+     * 并启动全流程监测
+     */
+    fun launchMonitor() {
+        val mediaProjectionManager =
+            context!!.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        resultLauncher.launch(mediaProjectionManager.createScreenCaptureIntent())
+    }
 
 }

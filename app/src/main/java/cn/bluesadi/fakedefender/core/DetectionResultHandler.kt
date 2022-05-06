@@ -1,4 +1,4 @@
-package cn.bluesadi.fakedefender.face
+package cn.bluesadi.fakedefender.core
 
 /**
  *

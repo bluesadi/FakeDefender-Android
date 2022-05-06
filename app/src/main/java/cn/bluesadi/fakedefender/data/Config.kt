@@ -9,9 +9,9 @@ import com.xuexiang.xutil.data.SPUtils
  */
 object Config {
 
-    private val config = SPUtils.getSharedPreferences("config")
     private const val FIRST_RUNNING_TIME_KEY = "first_running_time"
     private const val LAST_RUNNING_TIME_KEY = "last_running_time"
+    private const val LAST_PHONE_NUMBER = "last_phone_number"
     private const val COOKIE_KEY = "cookie"
 
     val firstRunningTime
@@ -28,6 +28,12 @@ object Config {
         get() = config.getLong(LAST_RUNNING_TIME_KEY, 0)
         set(value) = config.edit().apply {
             putLong(LAST_RUNNING_TIME_KEY, value)
+        }.apply()
+
+    var phoneNumber
+        get() = config.getString(LAST_PHONE_NUMBER, "")
+        set(value) = config.edit().apply {
+            putString(LAST_PHONE_NUMBER, value)
         }.apply()
 
     var cookie

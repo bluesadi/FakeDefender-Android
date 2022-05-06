@@ -2,11 +2,13 @@ package cn.bluesadi.fakedefender.network
 
 import android.graphics.Bitmap
 import android.graphics.Rect
-import cn.bluesadi.fakedefender.face.DetectionRecord
-import cn.bluesadi.fakedefender.face.MonitorManager
+import android.util.Log
+import cn.bluesadi.fakedefender.core.DetectionRecord
+import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.util.ImageUtil
 import cn.bluesadi.fakedefender.util.network.Http
 import com.android.volley.Response
+import kotlinx.coroutines.coroutineScope
 import org.json.JSONObject
 import java.util.*
 
@@ -18,16 +20,20 @@ import java.util.*
 object NetworkServices {
 
     fun getAppCategory(pkgName: String, listener: Response.Listener<Pair<Int, String>>) {
-        Http(Http.COMMON_URL + "/category").post(JSONObject().apply {
+        Http(Http.COMMON_URL + "/user/get_app_info").post(JSONObject().apply {
             put("pkgName", pkgName)
         }, { response ->
+            val code = response.getInt("code")
             listener.onResponse(
-                Pair(
-                    response.getInt("categoryId"),
-                    response.getString("categoryName")
-                )
+                if(code == 0) {
+                    val data = response.getJSONObject("data")
+                    Pair(
+                        data.getInt("categoryId"),
+                        data.getString("categoryName")
+                    )
+                }else Pair(-1, "")
             )
-        })
+        }, false)
     }
 
     fun getVerifyCode(phoneNumber: String, listener: Response.Listener<JSONObject>){

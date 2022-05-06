@@ -3,11 +3,17 @@ package cn.bluesadi.fakedefender.fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.bluesadi.fakedefender.R
+import cn.bluesadi.fakedefender.activity.LoginActivity
+import cn.bluesadi.fakedefender.adapter.AppListAdapter
 import cn.bluesadi.fakedefender.base.BaseTabFragment
+import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
+import cn.bluesadi.fakedefender.data.Config
 import cn.bluesadi.fakedefender.databinding.FragmentGeneralSettingsBinding
 import cn.bluesadi.fakedefender.util.ToastUtil
 import com.xuexiang.xui.widget.grouplist.XUIGroupListView
 import com.xuexiang.xutil.app.ActivityUtils
+import kotlinx.coroutines.runBlocking
 
 /**
  *
@@ -30,9 +36,19 @@ class GeneralSettingsFragment : BaseTabFragment() {
             glvGeneralSettings = it.glvGeneralSettings
         }
         XUIGroupListView.newSection(context)
-            .setDescription("TEST")
-            .addItemView(glvGeneralSettings.createItemView("TEST")) { v: View? ->
-                ToastUtil.info("Test")
+            .setTitle(getString(R.string.account_settings))
+            .addItemView(glvGeneralSettings.createItemView(getString(R.string.restore_default_settings))){
+                runBlocking {
+                    RiskLevelManager.reset()
+                    AppListAdapter.INSTANCE.notifyDataSetChanged()
+                    ToastUtil.info(getString(R.string.restore_default_settings_completed))
+                }
+            }
+            .addItemView(glvGeneralSettings.createItemView(getString(R.string.logout).format(Config.phoneNumber))){
+                Config.cookie = null
+                Config.phoneNumber = null
+                ActivityUtils.startActivity(LoginActivity::class.java)
+                ToastUtil.info(getString(R.string.info_logout))
             }
             .addTo(glvGeneralSettings)
     }

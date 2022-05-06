@@ -1,23 +1,15 @@
 package cn.bluesadi.fakedefender.adapter
 
-import android.graphics.Bitmap
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toDrawable
 import cn.bluesadi.fakedefender.R
-import cn.bluesadi.fakedefender.face.DetectionRecord
-import cn.bluesadi.fakedefender.data.Settings
+import cn.bluesadi.fakedefender.core.DetectionRecord
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import cn.bluesadi.fakedefender.fragment.UploadFragment
 import cn.bluesadi.fakedefender.util.TimeUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.xuexiang.xui.XUI
-import com.xuexiang.xui.utils.DrawableUtils
 import com.xuexiang.xui.utils.ResUtils
-import com.xuexiang.xui.utils.Utils
-import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog
 
 /**
  *
@@ -25,7 +17,7 @@ import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog
  * @since 2022/3/25 16:58
  */
 class DetectionRecordListAdapter(var title: TextView? = null) : BaseQuickAdapter<DetectionRecord, BaseViewHolder>(
-    R.layout.item_check_record, mutableListOf()) {
+    R.layout.item_detection_record, mutableListOf()) {
 
     companion object {
         val INSTANCE by lazy {
@@ -49,7 +41,7 @@ class DetectionRecordListAdapter(var title: TextView? = null) : BaseQuickAdapter
     }
 
     fun addRecord(record: DetectionRecord, manual: Boolean){
-        if(data.size >= Settings.maxCheckRecordListSize){
+        if(data.size >= GeneralSettings.maxCheckRecordListSize){
             data.removeLast()
             notifyItemRemoved(data.size)
         }

@@ -13,6 +13,10 @@ import org.json.JSONObject
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.net.CookiePolicy
+import com.android.volley.DefaultRetryPolicy
+
+
+
 
 /**
  *
@@ -22,7 +26,8 @@ import java.net.CookiePolicy
 class Http(val url: String = COMMON_URL) {
 
     companion object {
-        const val COMMON_URL = "http://124.222.27.211:5000"
+        const val COMMON_URL = "http://10.136.126.13:5000"
+        //const val COMMON_URL = "http://10.136.126.13:5000"
 
         fun validate(jsonObject: JSONObject) : Boolean{
             return jsonObject.has("code") && jsonObject.getInt("code") == 0
@@ -47,7 +52,13 @@ class Http(val url: String = COMMON_URL) {
                     ToastUtil.error(ResUtils.getString(R.string.http_request_error)
                             + "(${it.statusCode}) ${error.message}")
                 } ?: ToastUtil.error(ResUtils.getString(R.string.http_request_error) + error.message)
-            })
+            }).setRetryPolicy(
+                DefaultRetryPolicy(
+                    10000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+                )
+            )
         )
     }
 

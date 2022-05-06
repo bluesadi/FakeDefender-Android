@@ -3,13 +3,12 @@ package cn.bluesadi.fakedefender.activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.viewbinding.ViewBinding
 import cn.bluesadi.fakedefender.base.BaseActivity
+import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
 import cn.bluesadi.fakedefender.databinding.ActivityLoginBinding
 import cn.bluesadi.fakedefender.fragment.LoadingFragment
 import cn.bluesadi.fakedefender.fragment.LoginFragment
 import cn.bluesadi.fakedefender.network.NetworkServices
-import cn.bluesadi.fakedefender.util.Cache
 import cn.bluesadi.fakedefender.util.network.Http
 import com.xuexiang.xui.utils.StatusBarUtils
 import com.xuexiang.xutil.app.ActivityUtils
@@ -25,7 +24,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding?>(){
         super.onCreate(savedInstanceState)
         openPage(LoadingFragment::class.java)
         NetworkServices.checkState{
-            Cache.init()
+            RiskLevelManager.init()
             if(Http.validate(it)){
                 ActivityUtils.startActivity(MainActivity::class.java)
             }else{

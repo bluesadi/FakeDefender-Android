@@ -3,14 +3,12 @@ package cn.bluesadi.fakedefender.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.CheckBox
-import cn.bluesadi.fakedefender.FakeDefenderApp
-import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.activity.MainActivity
 import cn.bluesadi.fakedefender.base.BaseFragment
+import cn.bluesadi.fakedefender.data.Config
 import cn.bluesadi.fakedefender.databinding.FragmentLoginBinding
 import cn.bluesadi.fakedefender.network.NetworkServices
 import cn.bluesadi.fakedefender.util.ToastUtil
-import cn.bluesadi.fakedefender.util.network.Http
 import com.xuexiang.xpage.annotation.Page
 import com.xuexiang.xpage.utils.TitleBar
 import com.xuexiang.xui.utils.ViewUtils
@@ -54,6 +52,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         btnLogin.setOnClickListener {
             if(etPhoneNumber.validate() && etVerifyCode.validate()){
                 NetworkServices.login(etPhoneNumber.text.toString(), etVerifyCode.text.toString()){
+                    Config.phoneNumber = etPhoneNumber.text.toString()
                     ToastUtil.success(it.getString("msg"))
                     ActivityUtils.startActivity(MainActivity::class.java)
                     popToBack()

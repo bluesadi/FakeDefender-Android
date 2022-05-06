@@ -1,9 +1,8 @@
-package cn.bluesadi.fakedefender.face
+package cn.bluesadi.fakedefender.core
 
 import android.graphics.*
 import cn.bluesadi.fakedefender.R
-import cn.bluesadi.fakedefender.util.ImageUtil
-import cn.bluesadi.fakedefender.data.Settings
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import com.xuexiang.xui.utils.ResUtils
 
 /**
@@ -24,20 +23,24 @@ class DetectionRecord(
 
     val riskScore: Int = if(facesScores.isEmpty()) 0 else facesScores.maxOf { it.score }
 
-    val riskColor: Int = ResUtils.getColor(when{
-        riskScore >= Settings.highScoreThreshold -> R.color.high_risk
-        riskScore >= Settings.mediumScoreThreshold -> R.color.medium_risk
-        else -> R.color.low_risk
-    })
+    val riskColor: Int = getRiskColor(riskScore)
+
+    private fun getRiskColor(riskScore: Int): Int{
+        return ResUtils.getColor(when{
+            riskScore >= GeneralSettings.highScoreThreshold -> R.color.high_risk
+            riskScore >= GeneralSettings.mediumScoreThreshold -> R.color.medium_risk
+            else -> R.color.low_risk
+        })
+    }
 
     val markedImage: Bitmap by lazy {
         facesScores.forEach { face ->
-            drawRect(bitmap, face.box, face.score)
+            drawRect(bitmap, face.box, face.score, getRiskColor(face.score))
         }
         bitmap
     }
 
-    private fun drawRect(bitmap: Bitmap, rect: Rect, score: Int){
+    private fun drawRect(bitmap: Bitmap, rect: Rect, score: Int, riskColor: Int){
         val canvas = Canvas(bitmap)
         val paint = Paint().apply {
             color = riskColor
@@ -46,7 +49,7 @@ class DetectionRecord(
         }
         val textPaint = Paint().apply {
             color = riskColor
-            textSize = bitmap.height / 8f
+            textSize = (rect.bottom - rect.top) / 5f
         }
         rect.apply {
             canvas.drawRect(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat(), paint)

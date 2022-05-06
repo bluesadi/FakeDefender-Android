@@ -1,16 +1,11 @@
 package cn.bluesadi.fakedefender
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import cn.bluesadi.fakedefender.base.BaseActivity
-import cn.bluesadi.fakedefender.util.Cache
 import com.xuexiang.xui.XUI
 import com.xuexiang.xpage.PageConfig
 import com.xuexiang.xutil.XUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
-
-import com.xuexiang.xui.widget.imageview.ImageLoader
+import com.xuexiang.xutil.data.SPUtils
 
 class FakeDefenderApp : Application() {
 
@@ -26,7 +21,9 @@ class FakeDefenderApp : Application() {
     }
 
     companion object {
-        val DEBUG = true
+        const val DEBUG = true
+
+        const val PACKAGE_NAME = "cn.bluesadi.fakedefender"
     }
 
 }

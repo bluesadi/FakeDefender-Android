@@ -6,11 +6,14 @@ import androidx.viewpager.widget.ViewPager
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.base.BaseHomeFragment
 import cn.bluesadi.fakedefender.base.BaseTabFragment
+import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.databinding.FragmentMonitorBinding
+import cn.bluesadi.fakedefender.util.d
 import com.google.android.material.tabs.TabLayout
 import com.xuexiang.xpage.annotation.Page
 import com.xuexiang.xui.adapter.FragmentAdapter
 import com.xuexiang.xui.utils.WidgetUtils
+import com.xuexiang.xui.widget.banner.recycler.layout.BannerLayoutManager
 
 @Page(name = "监测")
 class MonitorFragment : BaseHomeFragment<FragmentMonitorBinding>() {
@@ -33,8 +36,8 @@ class MonitorFragment : BaseHomeFragment<FragmentMonitorBinding>() {
         viewPagerMonitor.apply {
             adapter = FragmentAdapter<BaseTabFragment>(childFragmentManager).apply {
                 addFragment(MonitorMainFragment(), getString(R.string.monitor_main))
+                addFragment(MonitorStatusFragment(), getString(R.string.monitor_status))
                 addFragment(MonitorRecordFragment(), getString(R.string.monitor_record))
-                addFragment(MonitorStatisticFragment(), getString(R.string.monitor_statistic))
             }
         }
         tabMonitor.apply {
@@ -45,7 +48,22 @@ class MonitorFragment : BaseHomeFragment<FragmentMonitorBinding>() {
     }
 
     override fun initListeners() {
+        viewPagerMonitor.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) { }
 
+            override fun onPageScrollStateChanged(state: Int) { }
+
+            override fun onPageSelected(position: Int) {
+                if (position == 1 && !MonitorManager.refreshed){
+                    MonitorStatusFragment.INSTANCE.get()?.refresh()
+                    MonitorManager.refreshed = false
+                }
+            }
+        })
     }
 
 

@@ -82,7 +82,8 @@ object ImageUtil {
 
     fun convertToBase64(bitmap: Bitmap) : String {
         ByteArrayOutputStream().use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
+            d("SIZE2: ${out.size()}")
             return Base64.encodeToString(out.toByteArray(), Base64.DEFAULT)
         }
     }

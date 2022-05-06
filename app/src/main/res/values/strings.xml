@@ -84,20 +84,22 @@
 
     <!-- 监测 -->
     <string name="monitor_main">设备监测</string>
-    <string name="monitor_detail">详细数据</string>
     <string name="monitor_record">检测记录</string>
-    <string name="monitor_statistic">统计</string>
+    <string name="monitor_status">监测状态</string>
     <string name="monitor_record_entry">[风险值: %d] %s</string>
     <string name="monitor_record_amount">当前有 %d 条检测记录</string>
 
+    <!-- 监测状态 -->
+    <string name="alarm_threshold">告警阈值</string>
+    <string name="status_latest_100_scores">风险值变化情况</string>
+    <string name="status_latest_ten_records">最近 10 条监测记录</string>
+    <string name="status_risk_levels">风险等级变化情况</string>
+
     <!-- 设置 -->
     <string name="general_settings">通用设置</string>
+    <string name="alarm_settings">告警设置</string>
     <string name="scene_settings">风险分级</string>
     <string name="please_select_risk_level">选择风险等级</string>
-    <string name="high_risk">高风险</string>
-    <string name="medium_high_risk">中高风险</string>
-    <string name="medium_risk">中风险</string>
-    <string name="low_risk">低风险</string>
     <string name="tip_filter_apps">请输入APP名称进行过滤</string>
 
     <string name="please_select_image">请选择需要检测的图片</string>
@@ -119,5 +121,52 @@
     <string name="running_time">已保护您的设备 %d 天</string>
     <string name="last_running_time">上一次监测 %s</string>
     <string name="not_run_yet">还没有监测过哦</string>
+
+    <!-- risk level -->
+    <string name="extreme_high_risk">极高风险</string>
+    <string name="high_risk">高风险</string>
+    <!--<string name="medium_high_risk">中高风险</string>-->
+    <string name="medium_risk">中风险</string>
+    <string name="low_risk">低风险</string>
+    <string name="no_risk">无风险</string>
+
+    <string name="notification_title">FakeDefender</string>
+    <string name="notification_text">FakeDefender 全流程监测与告警系统运行中</string>
+
+    <string name="notification_alarm_title">FakeDefender 告警系统</string>
+    <string name="notification_alarm_text">检测到伪造人脸环境，请及时处理</string>
+
+    <!-- General Settings -->
+    <string name="account_settings">账号设置</string>
+    <string name="restore_default_settings">恢复默认设置</string>
+    <string name="restore_default_settings_completed">已恢复默认设置</string>
+    <string name="logout">退出账号（当前账号：%s）</string>
+    <string name="info_logout">已退出账号</string>
+
+    <!-- Alarm Settings -->
+    <string name="alarm_threshold_settings">告警阈值设置</string>
+    <string name="set_alarm_threshold">更改告警阈值（当前告警阈值：%d）</string>
+    <string name="please_select_threshold">选择告警阈值</string>
+    <string name="high_alarm_threshold">高阈值：90</string>
+    <string name="medium_alarm_threshold">中阈值：80</string>
+    <string name="low_alarm_threshold">低阈值：70</string>
+    <string name="set_detection_frequency">更改检测频率（当前监测频率：%s）</string>
+    <string name="please_select_frequency">选择检测频率</string>
+    <string name="detection_frequency_settings">检测频率设置</string>
+    <string name="high_detection_frequency">高频率</string>
+    <string name="medium_detection_frequency">中频率</string>
+    <string name="low_detection_frequency">低频率</string>
+    <string name="extreme_high_risk_frequency">极高风险：%d 次/毫秒</string>
+    <string name="high_risk_frequency">高风险：%d 毫秒</string>
+    <!--<string name="medium_high_risk">中高风险</string>-->
+    <string name="medium_risk_frequency">中风险：%d 毫秒</string>
+    <string name="low_risk_frequency">低风险：%d 毫秒</string>
+    <string name="no_risk_frequency">无风险：%d 毫秒</string>
+
+    <string name="alarm_method_settings">告警方式设置</string>
+    <string name="enable_bubble_alarm">弹窗告警</string>
+    <string name="enable_email_alarm">邮件告警</string>
+    <string name="enable_message_alarm">短信告警</string>
+
 
 </resources>
