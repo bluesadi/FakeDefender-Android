@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/xui_config_color_white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+        android:id="@+id/et_bound_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tip_please_input_phone_number"
+        android:inputType="number"
+        app:met_clearButton="true"
+        app:met_errorMessage="@string/tip_phone_number_error"
+        app:met_floatingLabel="normal"
+        app:met_floatingLabelText="@string/title_phone_number"
+        app:met_regexp="@string/regex_phone_number" />
+
+    <com.xuexiang.xui.widget.button.roundbutton.RoundButton
+        android:id="@+id/btn_save_phone_number"
+        style="@style/RoundButton.Auto"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/save_setting"
+        android:textSize="16sp"
+        android:textColor="@color/xui_default_round_btn_white_text"
+        app:rb_radius="15dp"
+        app:rb_backgroundColor="@color/xui_round_btn_green_bg"
+        app:rb_borderColor="@color/xui_round_btn_green_bg" />
+
+</LinearLayout>

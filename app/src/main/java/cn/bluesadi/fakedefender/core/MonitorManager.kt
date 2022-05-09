@@ -33,6 +33,7 @@ object MonitorManager {
     var runningSeconds = 0
     var screenshot : Screenshot? = null
     var refreshed = true
+    var lastAlarm = 0L
 
     var riskScoreRecords = mutableListOf<Entry>()
     var riskLevelRecords = mutableListOf<Entry>()
@@ -81,6 +82,8 @@ object MonitorManager {
 
     @SuppressLint("UnsafeOptInUsageError")
     fun startMonitor(screenshot: Screenshot){
+        lastAlarm = 0
+        RiskLevelManager.sensitive = false
         riskScore = 0
         riskScoreRecords = mutableListOf(Entry(1f, 0f))
         riskLevelRecords = mutableListOf()

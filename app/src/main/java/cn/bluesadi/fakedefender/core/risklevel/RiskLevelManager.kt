@@ -22,6 +22,7 @@ object RiskLevelManager {
     val globalRiskLevel: RiskLevel
         get() = getAppInfo(UStatsUtil.getRunningApp() ?: "")?.riskLevel
             ?: RiskLevel.NO_RISK
+    var sensitive = false
 
     var appInfoList = mutableListOf<AppInfo>()
     val sortedAppInfoList: MutableList<AppInfo>

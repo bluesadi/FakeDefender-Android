@@ -43,7 +43,6 @@ class MonitorStatusFragment : BaseTabFragment() {
     fun refresh(){
         ctScores.apply {
             data = LineData(LineDataSet(MonitorManager.riskScoreRecords, null).apply {
-                //fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
                 fillColor = Color.RED
                 color = Color.BLACK
                 setDrawFilled(true)

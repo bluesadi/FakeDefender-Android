@@ -2,6 +2,7 @@ package cn.bluesadi.fakedefender.core.risklevel
 
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.data.AlarmSettings
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import com.xuexiang.xui.utils.ResUtils
 import kotlin.math.min
 
@@ -27,7 +28,7 @@ enum class RiskLevel(val code: Int, val display: String, val color: Int) {
 
     val detectionInterval: Long
         get() {
-            return when(AlarmSettings.detectionFrequency){
+            return when(GeneralSettings.detectionFrequency){
                 /* 高频率 */
                 0 -> {
                     when(this){
@@ -51,10 +52,10 @@ enum class RiskLevel(val code: Int, val display: String, val color: Int) {
                 else -> {
                     when(this){
                         NO_RISK -> 8000
-                        LOW_RISK -> 3000
+                        LOW_RISK -> 5000
                         MEDIUM_RISK -> 2000
                         HIGH_RISK -> 1000
-                        EXTREME_HIGH_RISK -> 700
+                        EXTREME_HIGH_RISK -> 500
                     }
                 }
             }

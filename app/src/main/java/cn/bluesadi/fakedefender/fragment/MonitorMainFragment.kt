@@ -1,5 +1,6 @@
 package cn.bluesadi.fakedefender.fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
@@ -20,11 +21,19 @@ import cn.bluesadi.fakedefender.util.TimeUtil
 import android.content.Intent
 import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import cn.bluesadi.fakedefender.R
+import cn.bluesadi.fakedefender.core.keyword.KeywordDetector
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import cn.bluesadi.fakedefender.util.Screenshot
 import cn.bluesadi.fakedefender.util.ToastUtil
+import cn.bluesadi.fakedefender.util.d
+import com.xuexiang.xui.XUI
+import com.xuexiang.xutil.system.PermissionUtils
 
 
 class MonitorMainFragment : BaseTabFragment() {
@@ -123,11 +132,29 @@ class MonitorMainFragment : BaseTabFragment() {
         }
     }
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                launchMonitor()
+            }
+        }
+
     override fun initListeners() {
         btnStartMonitor.setOnClickListener {
-            launchMonitor()
+            if(GeneralSettings.enableAuxiliaryDetection && ContextCompat.checkSelfPermission(
+                context!!,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED){
+                requestPermissionLauncher.launch(
+                    Manifest.permission.RECORD_AUDIO)
+            } else{
+                launchMonitor()
+            }
         }
         btnStopMonitor.setOnClickListener {
+            KeywordDetector.stop()
             setRunningMode(false)
             MonitorManager.stopMonitor()
         }

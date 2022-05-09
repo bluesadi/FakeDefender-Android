@@ -20,16 +20,25 @@ import com.xuexiang.xutil.app.ActivityUtils
  */
 class LoginActivity : BaseActivity<ActivityLoginBinding?>(){
 
+    companion object{
+        var login = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        openPage(LoadingFragment::class.java)
-        NetworkServices.checkState{
-            RiskLevelManager.init()
-            if(Http.validate(it)){
-                ActivityUtils.startActivity(MainActivity::class.java)
-            }else{
-                openPage(LoginFragment::class.java)
+        if(!login) {
+            openPage(LoadingFragment::class.java)
+            NetworkServices.checkState {
+                RiskLevelManager.init()
+                if (Http.validate(it)) {
+                    login = true
+                    ActivityUtils.startActivity(MainActivity::class.java)
+                } else {
+                    openPage(LoginFragment::class.java)
+                }
             }
+        }else{
+            openPage(LoginFragment::class.java)
         }
     }
 

@@ -60,6 +60,21 @@ object NetworkServices {
         Http(Http.COMMON_URL + "/user/check_state").post(JSONObject(), listener, false)
     }
 
+    fun emailAlarm(phone: String, email: String, bitmap: Bitmap){
+        Http(Http.COMMON_URL + "/user/email_alarm").post(JSONObject().apply {
+            put("phone", phone)
+            put("target_email", email)
+            put("img", ImageUtil.convertToBase64(bitmap))
+        }, {})
+    }
+
+    fun messageAlarm(phone: String, targetPhone: String){
+        Http(Http.COMMON_URL + "/user/SMS_alarm").post(JSONObject().apply {
+            put("phone", phone)
+            put("target_phone", targetPhone)
+        }, {})
+    }
+
     fun predict(bitmap: Bitmap, listener: Response.Listener<DetectionRecord>){
         val timestamp = System.currentTimeMillis()
         Http(Http.COMMON_URL + "/user/predict").post(JSONObject().apply {

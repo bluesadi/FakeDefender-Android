@@ -15,9 +15,13 @@ import androidx.work.*
 import cn.bluesadi.fakedefender.fragment.MonitorMainFragment
 import androidx.core.app.NotificationCompat
 import cn.bluesadi.fakedefender.core.alarm.BubbleAlarm
+import cn.bluesadi.fakedefender.core.alarm.EmailAlarm
+import cn.bluesadi.fakedefender.core.alarm.SMSAlarm
+import cn.bluesadi.fakedefender.core.keyword.KeywordDetector
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevel
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
 import cn.bluesadi.fakedefender.data.AlarmSettings
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import cn.bluesadi.fakedefender.network.NetworkServices
 import cn.bluesadi.fakedefender.util.FaceDetector
 import cn.bluesadi.fakedefender.util.d
@@ -92,8 +96,13 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
             }
             if(it.facesScores.isEmpty()) hits = max(hits - 1, 0)
             /* 当分数超过阈值，告警 */
-            if(MonitorManager.riskScore >= AlarmSettings.alarmThreshold){
+            val now = System.currentTimeMillis()
+            if(MonitorManager.riskScore >= AlarmSettings.alarmThreshold &&
+                    now - MonitorManager.lastAlarm >= 60000){
                 if(AlarmSettings.enableBubbleAlarm) BubbleAlarm.alarm()
+                if(AlarmSettings.enableEmailAlarm) EmailAlarm.alarm()
+                if(AlarmSettings.enableMessageAlarm) SMSAlarm.alarm()
+                MonitorManager.lastAlarm = now
             }
         }
     }
@@ -110,13 +119,24 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
         }
         while (true){
             if(isStopped) break
-            val riskLevel = RiskLevelManager.globalRiskLevel
+            var riskLevel = RiskLevelManager.globalRiskLevel
             if(riskLevel == RiskLevel.NO_RISK){
                 delay(RiskLevel.NO_RISK.detectionInterval)
                 continue
             }
+            if(riskLevel >= RiskLevel.HIGH_RISK){
+                if (!KeywordDetector.isStart && GeneralSettings.enableAuxiliaryDetection){
+                    BubbleAlarm.keywordDetectorStartingAlarm()
+                    KeywordDetector.start()
+                }
+                if(RiskLevelManager.sensitive){
+                    riskLevel = RiskLevel.EXTREME_HIGH_RISK
+                }
+            }else if(RiskLevelManager.sensitive){
+                RiskLevelManager.sensitive = false
+                KeywordDetector.stop()
+            }
             screenshot.capture()?.let { bitmap ->
-                d("TEST")
                 if(hits < 5) {
                     FaceDetector.detectFaces(bitmap) { faces ->
                         if (faces.isNotEmpty()) {
@@ -127,7 +147,7 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
                 }else{
                     sendDetectionRequest(bitmap)
                 }
-            } ?: d("DEBUG: Fail")
+            }
             delay(riskLevel.detectionInterval)
         }
         return Result.success()
