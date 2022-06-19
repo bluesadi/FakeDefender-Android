@@ -20,6 +20,7 @@ import java.util.*
 object NetworkServices {
 
     fun getAppCategory(pkgName: String, listener: Response.Listener<Pair<Int, String>>) {
+        //Http("http://124.222.27.211:5000/user/get_app_info").post(JSONObject().apply {
         Http(Http.COMMON_URL + "/user/get_app_info").post(JSONObject().apply {
             put("pkgName", pkgName)
         }, { response ->
@@ -37,6 +38,7 @@ object NetworkServices {
     }
 
     fun getVerifyCode(phoneNumber: String, listener: Response.Listener<JSONObject>){
+        //Http("http://124.222.27.211:5000/user/get_verif_code").post(JSONObject().apply {
         Http(Http.COMMON_URL + "/user/get_verif_code").post(JSONObject().apply {
             put("phone", phoneNumber)
         }, listener)
@@ -50,6 +52,7 @@ object NetworkServices {
     }
 
     fun login(phoneNumber: String, verifyCode: String, listener: Response.Listener<JSONObject>){
+        //Http("http://124.222.27.211:5000/user/login").post(JSONObject().apply {
         Http(Http.COMMON_URL + "/user/login").post(JSONObject().apply {
             put("phone", phoneNumber)
             put("code", verifyCode)
@@ -62,6 +65,7 @@ object NetworkServices {
 
     fun emailAlarm(phone: String, email: String, bitmap: Bitmap){
         Http(Http.COMMON_URL + "/user/email_alarm").post(JSONObject().apply {
+        //Http("http://124.222.27.211:5000" + "/user/email_alarm").post(JSONObject().apply {
             put("phone", phone)
             put("target_email", email)
             put("img", ImageUtil.convertToBase64(bitmap))
@@ -69,6 +73,7 @@ object NetworkServices {
     }
 
     fun messageAlarm(phone: String, targetPhone: String){
+        //Http("http://124.222.27.211:5000" + "/user/SMS_alarm").post(JSONObject().apply {
         Http(Http.COMMON_URL + "/user/SMS_alarm").post(JSONObject().apply {
             put("phone", phone)
             put("target_phone", targetPhone)

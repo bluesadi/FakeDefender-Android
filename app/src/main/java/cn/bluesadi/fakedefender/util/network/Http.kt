@@ -26,7 +26,7 @@ import com.android.volley.DefaultRetryPolicy
 class Http(val url: String = COMMON_URL) {
 
     companion object {
-        const val COMMON_URL = "http://10.136.126.13:5000"
+        const val COMMON_URL = "http://121.48.227.132:5000"
         //const val COMMON_URL = "http://10.136.126.13:5000"
 
         fun validate(jsonObject: JSONObject) : Boolean{

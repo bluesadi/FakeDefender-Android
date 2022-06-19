@@ -9,14 +9,11 @@ import androidx.work.WorkManager
 import cn.bluesadi.fakedefender.adapter.DetectionRecordListAdapter
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
 import cn.bluesadi.fakedefender.fragment.MonitorMainFragment
-import cn.bluesadi.fakedefender.fragment.MonitorStatusFragment
-import cn.bluesadi.fakedefender.util.ImageUtil
-import cn.bluesadi.fakedefender.util.Screenshot
+import cn.bluesadi.fakedefender.util.media.Screenshot
 import cn.bluesadi.fakedefender.util.UStatsUtil
 import cn.bluesadi.fakedefender.util.d
 import com.github.mikephil.charting.data.Entry
 import com.xuexiang.xui.XUI
-import kotlin.math.ln
 import kotlin.math.min
 
 /**

@@ -1,23 +1,22 @@
-package cn.bluesadi.fakedefender.core.keyword
+package cn.bluesadi.fakedefender.util.media
 
 /**
  *
  * @author 34r7hm4n
  * @since 2022/5/7 19:45
  */
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
-import androidx.core.app.ActivityCompat
+import android.media.*
+import android.os.Build
+import androidx.annotation.RequiresApi
+import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.util.d
-import com.xuexiang.xui.XUI
 
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("MissingPermission")
 class AudioRecordUtil {
+
     private var audioRecord: AudioRecord
     private val bufferSize: Int = AudioRecord.getMinBufferSize(
         SAMPLE_RATE,
@@ -65,14 +64,22 @@ class AudioRecordUtil {
         isStart = false
     }
 
-
     init {
-        audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
-            SAMPLE_RATE,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT,
-            bufferSize
-        )
+        val builder = AudioRecord.Builder()
+            .setAudioFormat(AudioFormat.Builder()
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                .setSampleRate(SAMPLE_RATE)
+                .build())
+            .setBufferSizeInBytes(bufferSize)
+        MonitorManager.screenshot?.mediaProjection?.let {
+            d("哈哈哈: $bufferSize")
+            builder.setAudioPlaybackCaptureConfig(
+                AudioPlaybackCaptureConfiguration.Builder(it)
+                .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
+                .build()
+            )
+        } ?: d("无语")
+        audioRecord = builder.build()
     }
 }

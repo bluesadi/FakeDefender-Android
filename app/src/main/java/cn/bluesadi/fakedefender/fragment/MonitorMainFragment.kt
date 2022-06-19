@@ -14,7 +14,6 @@ import com.xuexiang.xui.widget.button.roundbutton.RoundButton
 import java.lang.ref.WeakReference
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.widget.ImageView
 import cn.bluesadi.fakedefender.data.Config
 import cn.bluesadi.fakedefender.util.TimeUtil
@@ -24,16 +23,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.media.projection.MediaProjectionManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.core.keyword.KeywordDetector
 import cn.bluesadi.fakedefender.data.GeneralSettings
-import cn.bluesadi.fakedefender.util.Screenshot
-import cn.bluesadi.fakedefender.util.ToastUtil
-import cn.bluesadi.fakedefender.util.d
-import com.xuexiang.xui.XUI
-import com.xuexiang.xutil.system.PermissionUtils
+import cn.bluesadi.fakedefender.util.media.Screenshot
 
 
 class MonitorMainFragment : BaseTabFragment() {

@@ -2,6 +2,9 @@ package cn.bluesadi.fakedefender.core.keyword
 
 import cn.bluesadi.fakedefender.core.alarm.BubbleAlarm
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
+import cn.bluesadi.fakedefender.util.d
+import cn.bluesadi.fakedefender.util.media.AudioRecordUtil
+import cn.bluesadi.fakedefender.util.media.SensitiveWordDetector
 import cn.xfyun.api.RtasrClient
 import cn.xfyun.service.rta.AbstractRtasrWebSocketListener
 import com.alibaba.fastjson.JSON
@@ -22,10 +25,7 @@ object KeywordDetector {
     var isStart = false
     private var client: RtasrClient? = null
     private var recorder: AudioRecordUtil? = null
-
-    val SENSITIVE_KEYWORDS = listOf(
-        "转账"
-    )
+    private var cooldown = false
 
     fun start(){
         isStart = true
@@ -36,17 +36,19 @@ object KeywordDetector {
             }
 
             override fun onSuccess(webSocket: WebSocket?, text: String) {
-                getContent(text)?.run {
-                    SENSITIVE_KEYWORDS.forEach { keyword ->
-                        if(contains(keyword)){
+                getContent(text)?.let { statement ->
+                    if(!cooldown){
+                        cooldown = true
+                        SensitiveWordDetector.detect(statement)?.let { word ->
                             RiskLevelManager.sensitive = true
-                            BubbleAlarm.sensitiveKeywordStartingAlarm(keyword)
+                            BubbleAlarm.sensitiveKeywordStartingAlarm(word)
                         }
                     }
                 }
             }
 
             override fun onFail(webSocket: WebSocket?, t: Throwable?, response: Response?) {
+
             }
 
             override fun onBusinessFail(webSocket: WebSocket?, text: String?) {

@@ -145,7 +145,7 @@
     <string name="keyword_detector_alarm_text">开启场景分析模块</string>
 
     <string name="sensitive_keyword_alarm_title">FakeDefender 监测系统</string>
-    <string name="sensitive_keyword_alarm_text">检测到敏感词汇“%s”，将风险等级设置为极高</string>
+    <string name="sensitive_keyword_alarm_text">检测到敏感词汇：“%s”，将风险等级设置为极高</string>
 
     <!-- General Settings -->
     <string name="account_settings">账号设置</string>

@@ -9,6 +9,8 @@ import cn.bluesadi.fakedefender.databinding.ActivityLoginBinding
 import cn.bluesadi.fakedefender.fragment.LoadingFragment
 import cn.bluesadi.fakedefender.fragment.LoginFragment
 import cn.bluesadi.fakedefender.network.NetworkServices
+import cn.bluesadi.fakedefender.util.media.SensitiveWordDetector
+import cn.bluesadi.fakedefender.util.d
 import cn.bluesadi.fakedefender.util.network.Http
 import com.xuexiang.xui.utils.StatusBarUtils
 import com.xuexiang.xutil.app.ActivityUtils
@@ -28,6 +30,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding?>(){
         super.onCreate(savedInstanceState)
         if(!login) {
             openPage(LoadingFragment::class.java)
+            SensitiveWordDetector.init()
+            d("DEBUG: ${SensitiveWordDetector.detect("给我汇款500万")}")
             NetworkServices.checkState {
                 RiskLevelManager.init()
                 if (Http.validate(it)) {

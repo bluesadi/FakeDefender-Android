@@ -1,8 +1,7 @@
-package cn.bluesadi.fakedefender.util
+package cn.bluesadi.fakedefender.util.media
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -28,7 +27,7 @@ import java.lang.Exception
 class Screenshot @SuppressLint("WrongConstant") constructor(
     private val resultData: Intent
 ) {
-    private var mediaProjection: MediaProjection? = null
+    var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
     private val imageReader: ImageReader
     private val screenWidth: Int

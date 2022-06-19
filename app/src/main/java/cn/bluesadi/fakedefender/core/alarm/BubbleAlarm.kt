@@ -2,8 +2,10 @@ package cn.bluesadi.fakedefender.core.alarm
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.graphics.drawable.toBitmap
 import cn.bluesadi.fakedefender.activity.MainActivity
 import cn.bluesadi.fakedefender.core.MonitorWorker
 import com.xuexiang.xui.XUI
@@ -32,6 +34,8 @@ object BubbleAlarm {
         val pendingIntent = PendingIntent.getActivity(XUI.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notification = NotificationCompat.Builder(context, MonitorWorker.CHANNEL_ID)
             .setSmallIcon(cn.bluesadi.fakedefender.R.drawable.ic_logo)
+            .setLargeIcon(BitmapFactory.decodeResource(ResUtils.getResources(), cn.bluesadi.fakedefender.R.drawable.ic_logo))
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
             .setContentTitle(title)
             .setContentText(text)
             .setContentIntent(pendingIntent)

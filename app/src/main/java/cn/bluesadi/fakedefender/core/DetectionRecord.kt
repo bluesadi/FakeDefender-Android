@@ -44,6 +44,7 @@ class DetectionRecord(
         val canvas = Canvas(bitmap)
         val paint = Paint().apply {
             color = riskColor
+            color = Color.GREEN
             style = Paint.Style.STROKE
             strokeWidth = 10.0f
         }
