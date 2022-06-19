@@ -28,7 +28,7 @@ class DetectionRecord(
     private fun getRiskColor(riskScore: Int): Int{
         return ResUtils.getColor(when{
             riskScore >= GeneralSettings.highScoreThreshold -> R.color.high_risk
-            riskScore >= GeneralSettings.mediumScoreThreshold -> R.color.medium_risk
+            //riskScore >= GeneralSettings.mediumScoreThreshold -> R.color.medium_risk
             else -> R.color.low_risk
         })
     }
@@ -44,7 +44,6 @@ class DetectionRecord(
         val canvas = Canvas(bitmap)
         val paint = Paint().apply {
             color = riskColor
-            color = Color.GREEN
             style = Paint.Style.STROKE
             strokeWidth = 10.0f
         }
