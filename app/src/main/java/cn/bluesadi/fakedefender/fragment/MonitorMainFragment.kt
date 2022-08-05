@@ -26,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.core.keyword.KeywordDetector
+import cn.bluesadi.fakedefender.data.AdvancedSettings
 import cn.bluesadi.fakedefender.data.GeneralSettings
 import cn.bluesadi.fakedefender.util.media.Screenshot
 
@@ -137,7 +138,7 @@ class MonitorMainFragment : BaseTabFragment() {
 
     override fun initListeners() {
         btnStartMonitor.setOnClickListener {
-            if(GeneralSettings.enableAuxiliaryDetection && ContextCompat.checkSelfPermission(
+            if(AdvancedSettings.enableAuxiliaryDetection && ContextCompat.checkSelfPermission(
                 context!!,
                 Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED){

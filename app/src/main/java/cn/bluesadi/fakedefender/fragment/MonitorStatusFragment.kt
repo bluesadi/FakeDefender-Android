@@ -8,6 +8,7 @@ import androidx.core.view.size
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.base.BaseTabFragment
 import cn.bluesadi.fakedefender.core.MonitorManager
+import cn.bluesadi.fakedefender.core.MonitorStats
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevel
 import cn.bluesadi.fakedefender.data.AlarmSettings
 import cn.bluesadi.fakedefender.databinding.FragmentMonitorStatusBinding
@@ -28,6 +29,8 @@ class MonitorStatusFragment : BaseTabFragment() {
     private lateinit var ctScores: LineChart
     private lateinit var ctRecords: LineChart
     private lateinit var ctRiskLevels: LineChart
+    private lateinit var ctAllocatedMemory: LineChart
+    private lateinit var ctTraffic: LineChart
 
     override fun viewBindingInflate(
         inflater: LayoutInflater,
@@ -42,7 +45,7 @@ class MonitorStatusFragment : BaseTabFragment() {
 
     fun refresh(){
         ctScores.apply {
-            data = LineData(LineDataSet(MonitorManager.riskScoreRecords, null).apply {
+            data = LineData(LineDataSet(MonitorStats.riskScoreStats, null).apply {
                 fillColor = Color.RED
                 color = Color.BLACK
                 setDrawFilled(true)
@@ -52,7 +55,8 @@ class MonitorStatusFragment : BaseTabFragment() {
             invalidate()
         }
         ctRecords.apply {
-            data = LineData(LineDataSet(MonitorManager.tenLatestRecords, null).apply {
+            d("Refresh: ${MonitorStats.tenLatestStats}")
+            data = LineData(LineDataSet(MonitorStats.tenLatestStats, null).apply {
                 //fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
                 fillColor = Color.RED
                 setDrawFilled(true)
@@ -62,9 +66,31 @@ class MonitorStatusFragment : BaseTabFragment() {
             invalidate()
         }
         ctRiskLevels.apply {
-            data = LineData(LineDataSet(MonitorManager.riskLevelRecords, null).apply {
+            data = LineData(LineDataSet(MonitorStats.riskLevelStats, null).apply {
                 //fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
                 fillColor = Color.RED
+                color = Color.BLACK
+                setDrawFilled(true)
+                setDrawValues(false)
+                setDrawCircles(false)
+            })
+            invalidate()
+        }
+        ctAllocatedMemory.apply {
+            data = LineData(LineDataSet(MonitorStats.memoryStats, null).apply {
+                //fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
+                fillColor = Color.BLUE
+                color = Color.BLACK
+                setDrawFilled(true)
+                setDrawValues(false)
+                setDrawCircles(false)
+            })
+            invalidate()
+        }
+        ctTraffic.apply {
+            data = LineData(LineDataSet(MonitorStats.trafficStats, null).apply {
+                //fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
+                fillColor = Color.BLUE
                 color = Color.BLACK
                 setDrawFilled(true)
                 setDrawValues(false)
@@ -80,6 +106,8 @@ class MonitorStatusFragment : BaseTabFragment() {
             ctScores = it.ctScores
             ctRecords = it.ctRecords
             ctRiskLevels = it.ctRiskLevels
+            ctAllocatedMemory = it.ctAllocatedMemory
+            ctTraffic = it.ctTraffic
         }
 
         ctScores.apply {
@@ -87,12 +115,7 @@ class MonitorStatusFragment : BaseTabFragment() {
             description.isEnabled = false
             isDragEnabled = false
             setScaleEnabled(false)
-            xAxis.apply {
-                enableGridDashedLine(10f, 10f, 0f)
-                granularity = 1f
-                axisMinimum = 1f
-                position = XAxis.XAxisPosition.BOTTOM
-            }
+            xAxis.isEnabled = false
             axisLeft.apply {
                 axisRight.isEnabled = false
                 enableGridDashedLine(10f, 10f, 0f)
@@ -133,12 +156,7 @@ class MonitorStatusFragment : BaseTabFragment() {
             description.isEnabled = false
             isDragEnabled = false
             setScaleEnabled(false)
-            xAxis.apply {
-                enableGridDashedLine(10f, 10f, 0f)
-                granularity = 1f
-                axisMinimum = 1f
-                position = XAxis.XAxisPosition.BOTTOM
-            }
+            xAxis.isEnabled = false
             axisLeft.apply {
                 granularity = 1f
                 axisRight.isEnabled = false
@@ -154,6 +172,33 @@ class MonitorStatusFragment : BaseTabFragment() {
                 ))
             }
         }
+
+        ctAllocatedMemory.apply {
+            legend.isEnabled = false
+            description.isEnabled = false
+            isDragEnabled = false
+            setScaleEnabled(false)
+            xAxis.isEnabled = false
+            axisLeft.apply {
+                axisRight.isEnabled = false
+                enableGridDashedLine(10f, 10f, 0f)
+                axisMinimum = 0f
+            }
+        }
+
+        ctTraffic.apply {
+            legend.isEnabled = false
+            description.isEnabled = false
+            isDragEnabled = false
+            setScaleEnabled(false)
+            xAxis.isEnabled = false
+            axisLeft.apply {
+                axisRight.isEnabled = false
+                enableGridDashedLine(10f, 10f, 0f)
+                axisMinimum = 0f
+            }
+        }
+
         refresh()
     }
 

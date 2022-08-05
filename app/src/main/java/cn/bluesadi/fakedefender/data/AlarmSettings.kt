@@ -16,10 +16,10 @@ object AlarmSettings {
             putInt("alarm_threshold", value)
         }.apply()
 
-    var enableBubbleAlarm
-        get() = alarmSettings.getBoolean("enable_bubble_alarm", true)
+    var enablePopWindowAlarm
+        get() = alarmSettings.getBoolean("enable_pop_window_alarm", false)
         set(value) = alarmSettings.edit().apply {
-            putBoolean("enable_bubble_alarm", value)
+            putBoolean("enable_pop_window_alarm", value)
         }.apply()
 
     var enableEmailAlarm

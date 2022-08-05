@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.base.BaseTabFragment
+import cn.bluesadi.fakedefender.core.alarm.PopWindowAlarm
 import cn.bluesadi.fakedefender.data.AlarmSettings
 import cn.bluesadi.fakedefender.databinding.FragmentAlarmSettingsBinding
+import cn.bluesadi.fakedefender.util.ToastUtil
+import cn.bluesadi.fakedefender.util.setItemEnabled
 import com.xuexiang.xui.utils.ResUtils
 import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog
@@ -77,6 +80,8 @@ class AlarmSettingsFragment : BaseTabFragment() {
         return FragmentAlarmSettingsBinding.inflate(inflater, container, false)
     }
 
+
+
     override fun initViews() {
         (binding as? FragmentAlarmSettingsBinding)!!.let {
             glvAlarmSettings = it.glvAlarmSettings
@@ -115,30 +120,48 @@ class AlarmSettingsFragment : BaseTabFragment() {
             .addTo(glvAlarmSettings)
 
         val ivBoundEmail = glvAlarmSettings.createItemView(getString(R.string.bound_email).format(
-            AlarmSettings.boundEmail ?: "未绑定邮箱"))
+            AlarmSettings.boundEmail ?: "未绑定邮箱")).apply{
+                setItemEnabled(AlarmSettings.enableEmailAlarm)
+        }
         val ivBoundPhoneNumber = glvAlarmSettings.createItemView(getString(R.string.bound_phone_number).format(
-            AlarmSettings.boundPhoneNumber ?: "未绑定手机号"))
+            AlarmSettings.boundPhoneNumber ?: "未绑定手机号")).apply {
+                setItemEnabled(AlarmSettings.enableMessageAlarm)
+        }
         XUIGroupListView.newSection(context)
             .setTitle(getString(R.string.alarm_method_settings))
+            .setDescription(getString(R.string.alarm_method_settings_desc))
             /*
             * 弹窗告警设置
+            * Default: false
             * */
-            .addItemView(glvAlarmSettings.createItemView(getString(R.string.enable_bubble_alarm)).apply {
-                accessoryType = XUICommonListItemView.ACCESSORY_TYPE_SWITCH
-                switch.isChecked = AlarmSettings.enableBubbleAlarm
-                switch.setOnCheckedChangeListener { _, isChecked ->
-                    AlarmSettings.enableBubbleAlarm = isChecked
-                }
+            .addItemView(glvAlarmSettings.createItemView(getString(R.string.enable_pop_window_alarm)).apply {
+                    accessoryType = XUICommonListItemView.ACCESSORY_TYPE_SWITCH
+                    switch.isChecked = AlarmSettings.enablePopWindowAlarm
+                    switch.setOnCheckedChangeListener { _, isChecked ->
+                        if(isChecked) {
+                            PopWindowAlarm.checkPermission(this@AlarmSettingsFragment) { result ->
+                                if (result) {
+                                    AlarmSettings.enablePopWindowAlarm = true
+                                } else {
+                                    ToastUtil.error(R.string.please_grant_pop_window_permission)
+                                    switch.isChecked = false
+                                }
+                            }
+                        }else{
+                            AlarmSettings.enablePopWindowAlarm = false
+                        }
+                    }
             }){ }
             /*
             * 邮件告警设置
+            * Default: false
             * */
             .addItemView(glvAlarmSettings.createItemView(getString(R.string.enable_email_alarm)).apply {
                 accessoryType = XUICommonListItemView.ACCESSORY_TYPE_SWITCH
-                AlarmSettings.enableEmailAlarm = true
                 switch.isChecked = AlarmSettings.enableEmailAlarm
                 switch.setOnCheckedChangeListener { _, isChecked ->
                     AlarmSettings.enableEmailAlarm = isChecked
+                    ivBoundEmail.setItemEnabled(isChecked)
                 }
             }){ }
             .addItemView(ivBoundEmail){
@@ -146,12 +169,14 @@ class AlarmSettingsFragment : BaseTabFragment() {
             }
             /*
             * 短信告警设置
+            * Default: false
             * */
             .addItemView(glvAlarmSettings.createItemView(getString(R.string.enable_message_alarm)).apply {
                 accessoryType = XUICommonListItemView.ACCESSORY_TYPE_SWITCH
                 switch.isChecked = AlarmSettings.enableMessageAlarm
                 switch.setOnCheckedChangeListener { _, isChecked ->
                     AlarmSettings.enableMessageAlarm = isChecked
+                    ivBoundPhoneNumber.setItemEnabled(isChecked)
                 }
             }){ }
             .addItemView(ivBoundPhoneNumber){

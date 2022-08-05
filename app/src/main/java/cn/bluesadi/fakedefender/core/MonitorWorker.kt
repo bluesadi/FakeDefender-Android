@@ -16,12 +16,13 @@ import cn.bluesadi.fakedefender.fragment.MonitorMainFragment
 import androidx.core.app.NotificationCompat
 import cn.bluesadi.fakedefender.core.alarm.BubbleAlarm
 import cn.bluesadi.fakedefender.core.alarm.EmailAlarm
+import cn.bluesadi.fakedefender.core.alarm.PopWindowAlarm
 import cn.bluesadi.fakedefender.core.alarm.SMSAlarm
 import cn.bluesadi.fakedefender.core.keyword.KeywordDetector
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevel
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
+import cn.bluesadi.fakedefender.data.AdvancedSettings
 import cn.bluesadi.fakedefender.data.AlarmSettings
-import cn.bluesadi.fakedefender.data.GeneralSettings
 import cn.bluesadi.fakedefender.network.NetworkServices
 import cn.bluesadi.fakedefender.util.FaceDetector
 import cn.bluesadi.fakedefender.util.d
@@ -88,23 +89,25 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
         )
     }
 
-    private fun sendDetectionRequest(bitmap: Bitmap){
-        NetworkServices.predict(bitmap) {
-            d(it.riskScore.toString())
+    private fun sendDetectionRequest(bitmap: Bitmap, manual: Boolean){
+        NetworkServices.predict(bitmap, {
             handler.post {
-                MonitorMainFragment.instance?.get()?.updateScore(MonitorManager.riskScore)
+                MonitorMainFragment.instance?.get()?.updateScore(MonitorStats.riskScore)
             }
             if(it.facesScores.isEmpty()) hits = max(hits - 1, 0)
             /* 当分数超过阈值，告警 */
             val now = System.currentTimeMillis()
-            if(MonitorManager.riskScore >= AlarmSettings.alarmThreshold &&
+            if(MonitorStats.riskScore >= AlarmSettings.alarmThreshold &&
                     now - MonitorManager.lastAlarm >= 60000){
-                if(AlarmSettings.enableBubbleAlarm) BubbleAlarm.alarm()
+                println("DEBUG: ${MonitorStats.riskScore}")
+                println("DEBUG: ${MonitorStats.riskScoreStats}")
+                BubbleAlarm.alarm()
+                if(AlarmSettings.enablePopWindowAlarm) PopWindowAlarm.alarm()
                 if(AlarmSettings.enableEmailAlarm) EmailAlarm.alarm()
                 if(AlarmSettings.enableMessageAlarm) SMSAlarm.alarm()
                 MonitorManager.lastAlarm = now
             }
-        }
+        }, manual)
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -117,20 +120,20 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
         val screenshot = MonitorManager.screenshot!!.also {
             it.startScreenShot()
         }
+        if(AdvancedSettings.enableAuxiliaryDetection){
+            KeywordDetector.init()
+        }
         while (true){
             if(isStopped) break
-            var riskLevel = RiskLevelManager.globalRiskLevel
+            val riskLevel = RiskLevelManager.globalRiskLevel
             if(riskLevel == RiskLevel.NO_RISK){
                 delay(RiskLevel.NO_RISK.detectionInterval)
                 continue
             }
             if(riskLevel >= RiskLevel.HIGH_RISK){
-                if (!KeywordDetector.isStart && GeneralSettings.enableAuxiliaryDetection){
+                if (!KeywordDetector.isStart && AdvancedSettings.enableAuxiliaryDetection){
                     BubbleAlarm.keywordDetectorStartingAlarm()
                     KeywordDetector.start()
-                }
-                if(RiskLevelManager.sensitive){
-                    riskLevel = RiskLevel.EXTREME_HIGH_RISK
                 }
             }else if(RiskLevelManager.sensitive){
                 RiskLevelManager.sensitive = false
@@ -141,11 +144,11 @@ class MonitorWorker(context: Context, workerParameters: WorkerParameters) : Coro
                     FaceDetector.detectFaces(bitmap) { faces ->
                         if (faces.isNotEmpty()) {
                             hits = min(hits + 1, 10)
-                            sendDetectionRequest(bitmap)
+                            sendDetectionRequest(bitmap, false)
                         }
                     }
                 }else{
-                    sendDetectionRequest(bitmap)
+                    sendDetectionRequest(bitmap, false)
                 }
             }
             delay(riskLevel.detectionInterval)

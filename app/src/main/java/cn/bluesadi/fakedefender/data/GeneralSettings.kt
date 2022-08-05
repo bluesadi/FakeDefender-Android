@@ -30,8 +30,8 @@ object GeneralSettings {
         }.apply()
 
     var detectionFrequency
-        get() = alarmSettings.getInt("detection_frequency", 1)
-        set(value) = alarmSettings.edit().apply {
+        get() = settings.getInt("detection_frequency", 1)
+        set(value) = settings.edit().apply {
             putInt("detection_frequency", value)
         }.apply()
 
@@ -42,9 +42,17 @@ object GeneralSettings {
             else -> ResUtils.getString(R.string.low_detection_frequency)
         }
 
-    var enableAuxiliaryDetection
-        get() = alarmSettings.getBoolean("enable_auxiliary_detection", false)
-        set(value) = alarmSettings.edit().apply {
-            putBoolean("enable_auxiliary_detection", value)
+    var imageQuality
+        get() = settings.getInt("image_quality", 2)
+        set(value) = settings.edit().apply {
+            putInt("image_quality", value)
         }.apply()
+
+    val imageQualityDisplay
+        get() = when(imageQuality){
+            0 -> ResUtils.getString(R.string.high_image_quality)
+            1 -> ResUtils.getString(R.string.moderate_image_quality)
+            else -> ResUtils.getString(R.string.low_image_quality)
+        }
+
 }

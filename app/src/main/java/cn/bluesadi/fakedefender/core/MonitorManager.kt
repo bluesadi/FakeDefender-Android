@@ -1,20 +1,23 @@
 package cn.bluesadi.fakedefender.core
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import androidx.annotation.RequiresApi
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import cn.bluesadi.fakedefender.adapter.DetectionRecordListAdapter
+import cn.bluesadi.fakedefender.core.alarm.PopWindowAlarm
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
 import cn.bluesadi.fakedefender.fragment.MonitorMainFragment
 import cn.bluesadi.fakedefender.util.media.Screenshot
 import cn.bluesadi.fakedefender.util.UStatsUtil
-import cn.bluesadi.fakedefender.util.d
-import com.github.mikephil.charting.data.Entry
+import cn.bluesadi.fakedefender.util.media.AudioRecordUtil
 import com.xuexiang.xui.XUI
-import kotlin.math.min
+import okio.ByteString.Companion.toByteString
+import java.nio.ByteBuffer
 
 /**
  *
@@ -25,23 +28,17 @@ object MonitorManager {
 
     private const val INVOLVED_NUMBER = 10
 
-    var riskScore = 0
     var running = false
     var runningSeconds = 0
     var screenshot : Screenshot? = null
-    var refreshed = true
+    var needRefresh = false
     var lastAlarm = 0L
-
-    var riskScoreRecords = mutableListOf<Entry>()
-    var riskLevelRecords = mutableListOf<Entry>()
-    var tenLatestRecords = mutableListOf<Entry>()
 
     private val timer = Handler(Looper.getMainLooper())
     private val timerTask = object : Runnable{
 
         override fun run() {
             MonitorMainFragment.instance?.get()?.let {
-                println(it)
                 runningSeconds++
                 it.updateTimer(runningSeconds)
                 timer.postAtTime(this, SystemClock.uptimeMillis() + 1000)
@@ -55,42 +52,27 @@ object MonitorManager {
     }
 
     fun update(record: DetectionRecord){
+        MonitorStats.update(record)
         DetectionRecordListAdapter.INSTANCE.apply {
             addRecord(record, false)
-            val sum = data.subList(0, min(INVOLVED_NUMBER, data.size)).sumOf {
-                it.riskScore
-            }
-            riskScore = ((-0.0001) * sum * sum + 0.2 * sum).toInt()
-            riskScoreRecords.add(Entry(riskScoreRecords.size + 1f, riskScore.toFloat()))
-            riskLevelRecords.add(Entry(riskLevelRecords.size + 1f, RiskLevelManager.globalRiskLevel.code.toFloat()))
-            d(riskLevelRecords.toString())
-            if(tenLatestRecords.size >= 10){
-                tenLatestRecords.removeAt(0)
-            }
-            tenLatestRecords.add(Entry(0f, record.riskScore.toFloat()))
-            repeat(min(10, tenLatestRecords.size)){
-                tenLatestRecords[it].x = it + 1f
-            }
-            refreshed = false
         }
+        needRefresh = true
     }
 
 
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("UnsafeOptInUsageError")
     fun startMonitor(screenshot: Screenshot){
-        lastAlarm = 0
+        MonitorStats.reset()
+        lastAlarm = 0L
         RiskLevelManager.sensitive = false
-        riskScore = 0
-        riskScoreRecords = mutableListOf(Entry(1f, 0f))
-        riskLevelRecords = mutableListOf()
-        tenLatestRecords = mutableListOf()
         this.screenshot = screenshot
         MonitorMainFragment.instance?.get()?.apply{
             updateLastRunningTime()
+            /* Check the permission for getting app stats */
             UStatsUtil.checkPermission(context!!)
         }
-        /* Check the permission for getting app stats */
         running = true
         timer.postAtTime(timerTask, SystemClock.uptimeMillis() + 1000)
         workManager.enqueueUniqueWork(MonitorWorker.UNIQUE_WORK_NAME, ExistingWorkPolicy.REPLACE, MonitorWorker.buildWorkRequest())

@@ -26,4 +26,5 @@ class FakeDefenderApp : Application() {
         const val PACKAGE_NAME = "cn.bluesadi.fakedefender"
     }
 
+
 }

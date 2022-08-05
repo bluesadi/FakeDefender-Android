@@ -95,9 +95,9 @@
 
     <!-- 监测状态 -->
     <string name="alarm_threshold">告警阈值</string>
-    <string name="status_latest_100_scores">风险值变化情况</string>
+    <string name="status_latest_100_scores">风险值变化状态</string>
     <string name="status_latest_ten_records">最近 10 条监测记录</string>
-    <string name="status_risk_levels">风险等级变化情况</string>
+    <string name="status_risk_levels">风险等级变化状态</string>
 
     <!-- 设置 -->
     <string name="general_settings">通用设置</string>
@@ -155,6 +155,14 @@
     <string name="info_logout">已退出账号</string>
     <string name="auxiliary_settings">语音辅助检测设置</string>
     <string name="enable_auxiliary_detection">启用语音辅助检测</string>
+    <!-- 图像质量设置 -->
+    <string name="image_quality_settings">图像质量设置</string>
+    <string name="set_image_quality">更改图像质量（当前图像质量：%s）</string>
+    <string name="set_image_quality_desc">图像质量越高，检测准确度越高，同时会导致使用的流量增加，建议在非 Wi-Fi 环境下使用低质量</string>
+    <string name="high_image_quality">高质量</string>
+    <string name="moderate_image_quality">中等质量</string>
+    <string name="low_image_quality">低质量</string>
+    <string name="select_image_quality">选择图像质量</string>
 
     <!-- Alarm Settings -->
     <string name="alarm_threshold_settings">告警阈值设置</string>
@@ -169,19 +177,35 @@
     <string name="high_detection_frequency">高频率</string>
     <string name="medium_detection_frequency">中频率</string>
     <string name="low_detection_frequency">低频率</string>
-    <string name="extreme_high_risk_frequency">极高风险：%d 毫秒</string>
-    <string name="high_risk_frequency">高风险：%d 毫秒</string>
+    <string name="extreme_high_risk_frequency">极高风险：%d 毫秒/次</string>
+    <string name="high_risk_frequency">高风险：%d 毫秒/次</string>
     <!--<string name="medium_high_risk">中高风险</string>-->
-    <string name="medium_risk_frequency">中风险：%d 毫秒</string>
-    <string name="low_risk_frequency">低风险：%d 毫秒</string>
-    <string name="no_risk_frequency">无风险：%d 毫秒</string>
+    <string name="medium_risk_frequency">中风险：%d 毫秒/次</string>
+    <string name="low_risk_frequency">低风险：%d 毫秒/次</string>
+    <string name="no_risk_frequency">无风险：%d 毫秒/次</string>
     <string name="bound_email">绑定邮箱：%s</string>
     <string name="bound_phone_number">绑定手机号：%s</string>
 
     <string name="alarm_method_settings">告警方式设置</string>
-    <string name="enable_bubble_alarm">弹窗告警</string>
+    <string name="enable_pop_window_alarm">弹窗告警</string>
     <string name="enable_email_alarm">邮件告警</string>
     <string name="enable_message_alarm">短信告警</string>
+    <string name="advanced_settings">高级设置</string>
 
+    <!-- Advanced Settings -->
+    <string name="set_filter_strategy">设置模糊人脸过滤策略（当前策略：%s）</string>
+    <string name="select_filter_strategy">选择模糊人脸过滤策略</string>
+    <string name="strict_filter_strategy">严格</string>
+    <string name="moderate_filter_strategy">适中</string>
+    <string name="loose_filter_strategy">宽松</string>
+    <string name="description_filter_strategy">模糊人脸的检测误报率较高，因此过滤模糊人脸有利于提高检测准确度</string>
+    <string name="status_allocated_memory">使用内存统计 (MB)</string>
+    <string name="status_traffic">使用流量统计 (MB)</string>
+    <string name="please_grant_pop_window_permission">正确给予权限才能开启弹窗告警</string>
+    <string name="alarm_method_settings_desc">默认开启气泡通知告警，以上为三种可选的额外告警方式</string>
+    <string name="pop_window_alarm_title">虚假人脸告警</string>
+    <string name="pop_window_alarm_message">检测到风险值已达到设定告警阈值，请选择返回 APP 或忽略告警</string>
+    <string name="ignore_pop_window_alarm">忽略</string>
+    <string name="switch_back_to_app">返回 APP</string>
 
 </resources>

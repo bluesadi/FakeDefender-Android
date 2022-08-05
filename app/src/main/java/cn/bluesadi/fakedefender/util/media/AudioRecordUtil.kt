@@ -8,24 +8,25 @@ package cn.bluesadi.fakedefender.util.media
 import android.annotation.SuppressLint
 import android.media.*
 import android.os.Build
+import android.os.Process
 import androidx.annotation.RequiresApi
 import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.util.d
 
-
 @RequiresApi(Build.VERSION_CODES.Q)
-@SuppressLint("MissingPermission")
 class AudioRecordUtil {
 
-    private var audioRecord: AudioRecord
     private val bufferSize: Int = AudioRecord.getMinBufferSize(
         SAMPLE_RATE,
-        AudioFormat.CHANNEL_IN_DEFAULT,
+        AudioFormat.CHANNEL_CONFIGURATION_MONO,
         AudioFormat.ENCODING_PCM_16BIT
     )
     private var readSize = 0
-    private var isStart = false
+    private var isRecording = false
     private lateinit var onRecordListener: OnRecordListener
+
+    private var audioRecord: AudioRecord? = null
+    private var thread: Thread? = null
 
     companion object{
         private const val SAMPLE_RATE = 16000
@@ -39,32 +40,8 @@ class AudioRecordUtil {
         fun readByte(data: ByteArray, size: Int)
     }
 
-    /**
-     * 开始
-     */
-    fun startRecord() {
-        Thread {
-            isStart = true
-            audioRecord.startRecording()
-            val audioData = ByteArray(bufferSize)
-            while (isStart) {
-                readSize = audioRecord.read(audioData, 0, bufferSize)
-                onRecordListener.readByte(audioData, readSize)
-            }
-            //释放
-            audioRecord.stop()
-            audioRecord.release()
-        }.start()
-    }
-
-    /**
-     * 停止
-     */
-    fun stopRecord() {
-        isStart = false
-    }
-
-    init {
+    @SuppressLint("MissingPermission")  // has requested permission when starting monitoring
+    fun buildRecord() : AudioRecord{
         val builder = AudioRecord.Builder()
             .setAudioFormat(AudioFormat.Builder()
                 .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
@@ -72,14 +49,63 @@ class AudioRecordUtil {
                 .setSampleRate(SAMPLE_RATE)
                 .build())
             .setBufferSizeInBytes(bufferSize)
-        MonitorManager.screenshot?.mediaProjection?.let {
-            d("哈哈哈: $bufferSize")
+        MonitorManager.screenshot!!.mediaProjection!!.let {
             builder.setAudioPlaybackCaptureConfig(
                 AudioPlaybackCaptureConfiguration.Builder(it)
-                .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
-                .build()
+                    .addMatchingUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
             )
-        } ?: d("无语")
-        audioRecord = builder.build()
+        }
+        return builder.build()
+    }
+
+    fun initRecord() {
+        audioRecord = buildRecord().apply {
+            startRecording()
+        }
+    }
+
+    /**
+     * 开始
+     */
+    fun startRecord() {
+        thread = Thread {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO)
+            isRecording = true
+            audioRecord?.apply {
+                val audioData = ByteArray(bufferSize)
+                while (isRecording && recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+                    readSize = read(audioData, 0, bufferSize)
+                    if (readSize > 0) {
+                        onRecordListener.readByte(audioData, readSize)
+                    }
+                    Thread.sleep(40)
+                }
+            }
+        }
+        thread!!.start()
+    }
+
+    /**
+     * 停止
+     */
+    fun stopRecord() {
+        isRecording = false
+        audioRecord?.apply {
+            if (recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+                val tmp = ByteArray(bufferSize)
+                while(read(tmp, 0, bufferSize) > 0)
+                stop()
+                d("audioRecord.stop()")
+            }
+            if (state == AudioRecord.STATE_INITIALIZED) {
+                release()
+                d("audioRecord.release()")
+            }
+            println("DEBUG-1: " + recordingState)
+            println("DEBUG-2" + state)
+        }
+        audioRecord = null
+        thread = null
     }
 }

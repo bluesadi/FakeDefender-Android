@@ -9,7 +9,7 @@ import com.xuexiang.xutil.data.SPUtils
  * @since 2022/4/28 8:59
  */
 private fun getConfig(spName: String) : SharedPreferences{
-    return SPUtils.getSharedPreferences("app_risk_level_data_${Config.phoneNumber}")
+    return SPUtils.getSharedPreferences("${spName}_${Config.phoneNumber}")
 }
 
 val appRiskLevelData by lazy {
@@ -22,6 +22,10 @@ val settings by lazy {
 
 val alarmSettings by lazy {
     getConfig("alarm_settings")
+}
+
+val advancedSettings by lazy {
+    getConfig("advanced_settings")
 }
 
 val config: SharedPreferences by lazy {

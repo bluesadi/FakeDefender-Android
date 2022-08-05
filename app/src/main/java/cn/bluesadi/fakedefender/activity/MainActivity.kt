@@ -1,6 +1,9 @@
 package cn.bluesadi.fakedefender.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import cn.bluesadi.fakedefender.R
 import cn.bluesadi.fakedefender.base.BaseActivity

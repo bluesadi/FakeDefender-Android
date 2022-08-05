@@ -32,30 +32,31 @@ enum class RiskLevel(val code: Int, val display: String, val color: Int) {
                 /* 高频率 */
                 0 -> {
                     when(this){
-                        NO_RISK -> 3000
-                        LOW_RISK -> 2000
-                        MEDIUM_RISK -> 800
-                        HIGH_RISK -> 400
-                        EXTREME_HIGH_RISK -> 200
+                        NO_RISK -> 5000
+                        LOW_RISK -> 3000
+                        MEDIUM_RISK -> 1200
+                        HIGH_RISK -> 1000
+                        EXTREME_HIGH_RISK -> 500
                     }
                 }
                 /* 中频率 */
                 1 -> {
                     when(this){
-                        NO_RISK -> 5000
-                        LOW_RISK -> 3000
-                        MEDIUM_RISK -> 1000
-                        HIGH_RISK -> 500
-                        EXTREME_HIGH_RISK -> 300
-                    }
-                }
-                else -> {
-                    when(this){
                         NO_RISK -> 8000
                         LOW_RISK -> 5000
                         MEDIUM_RISK -> 2000
-                        HIGH_RISK -> 1000
-                        EXTREME_HIGH_RISK -> 500
+                        HIGH_RISK -> 1200
+                        EXTREME_HIGH_RISK -> 1000
+                    }
+                }
+                /* 低频率 */
+                else -> {
+                    when(this){
+                        NO_RISK -> 10000
+                        LOW_RISK -> 8000
+                        MEDIUM_RISK -> 5000
+                        HIGH_RISK -> 2000
+                        EXTREME_HIGH_RISK -> 1000
                     }
                 }
             }

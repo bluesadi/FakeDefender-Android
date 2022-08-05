@@ -92,10 +92,10 @@ class UploadFragment : BaseHomeFragment<FragmentUploadBinding>() {
                                 .progress(true, 0)
                                 .progressIndeterminateStyle(false)
                                 .show()
-                            NetworkServices.predict(bitmap) {
+                            NetworkServices.predict(bitmap, {
                                 showDetectionResultDialog(context!!, it)
                                 dialog.dismiss()
-                            }
+                            }, true)
                         }
                     }
                     override fun onCancel() {}

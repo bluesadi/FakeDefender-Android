@@ -9,6 +9,7 @@ import com.xuexiang.xui.XUI
 import org.json.JSONObject
 import android.graphics.Bitmap
 import android.util.Base64
+import cn.bluesadi.fakedefender.data.GeneralSettings
 import java.io.*
 
 
@@ -82,8 +83,12 @@ object ImageUtil {
 
     fun convertToBase64(bitmap: Bitmap) : String {
         ByteArrayOutputStream().use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, out)
-            d("SIZE2: ${out.size()}")
+            val quality = when(GeneralSettings.imageQuality){
+                0 -> 10
+                2 -> 50
+                else -> 25
+            }
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
             return Base64.encodeToString(out.toByteArray(), Base64.DEFAULT)
         }
     }

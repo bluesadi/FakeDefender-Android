@@ -8,12 +8,10 @@ import cn.bluesadi.fakedefender.base.BaseHomeFragment
 import cn.bluesadi.fakedefender.base.BaseTabFragment
 import cn.bluesadi.fakedefender.core.MonitorManager
 import cn.bluesadi.fakedefender.databinding.FragmentMonitorBinding
-import cn.bluesadi.fakedefender.util.d
 import com.google.android.material.tabs.TabLayout
 import com.xuexiang.xpage.annotation.Page
 import com.xuexiang.xui.adapter.FragmentAdapter
 import com.xuexiang.xui.utils.WidgetUtils
-import com.xuexiang.xui.widget.banner.recycler.layout.BannerLayoutManager
 
 @Page(name = "监测")
 class MonitorFragment : BaseHomeFragment<FragmentMonitorBinding>() {
@@ -58,9 +56,9 @@ class MonitorFragment : BaseHomeFragment<FragmentMonitorBinding>() {
             override fun onPageScrollStateChanged(state: Int) { }
 
             override fun onPageSelected(position: Int) {
-                if (position == 1 && !MonitorManager.refreshed){
+                if (position == 1 && MonitorManager.needRefresh){
                     MonitorStatusFragment.INSTANCE.get()?.refresh()
-                    MonitorManager.refreshed = false
+                    MonitorManager.needRefresh = true
                 }
             }
         })

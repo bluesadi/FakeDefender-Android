@@ -1,8 +1,9 @@
 package cn.bluesadi.fakedefender.core.keyword
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import cn.bluesadi.fakedefender.core.alarm.BubbleAlarm
 import cn.bluesadi.fakedefender.core.risklevel.RiskLevelManager
-import cn.bluesadi.fakedefender.util.d
 import cn.bluesadi.fakedefender.util.media.AudioRecordUtil
 import cn.bluesadi.fakedefender.util.media.SensitiveWordDetector
 import cn.xfyun.api.RtasrClient
@@ -25,8 +26,14 @@ object KeywordDetector {
     var isStart = false
     private var client: RtasrClient? = null
     private var recorder: AudioRecordUtil? = null
-    private var cooldown = false
+    private var cooldown = 0L
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun init(){
+        recorder = AudioRecordUtil().apply { initRecord() }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun start(){
         isStart = true
         client = RtasrClient.Builder().addPunc().signature("d4be95ae", "bb89d64746dd190ea3307aeb0f56c2e3").build()
@@ -37,9 +44,11 @@ object KeywordDetector {
 
             override fun onSuccess(webSocket: WebSocket?, text: String) {
                 getContent(text)?.let { statement ->
-                    if(!cooldown){
-                        cooldown = true
+                    println(statement)
+                    val time = System.currentTimeMillis()
+                    if(time - cooldown >= 60_000L){
                         SensitiveWordDetector.detect(statement)?.let { word ->
+                            cooldown = time
                             RiskLevelManager.sensitive = true
                             BubbleAlarm.sensitiveKeywordStartingAlarm(word)
                         }
@@ -54,22 +63,22 @@ object KeywordDetector {
             override fun onBusinessFail(webSocket: WebSocket?, text: String?) {
             }
         })
-        recorder = AudioRecordUtil().apply {
+        recorder?.apply {
             setOnRecordListener(object : AudioRecordUtil.OnRecordListener{
                 override fun readByte(data: ByteArray, size: Int) {
-                    val result = socket.send(ByteBuffer.wrap(data).toByteString())
-                    //d("我听到了: ${data.size}, $result")
+                    socket.send(ByteBuffer.wrap(data).toByteString())
                 }
             })
             startRecord()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun stop(){
         if(isStart){
             isStart = false
-            client?.sendEnd()
             recorder?.stopRecord()
+            client?.sendEnd()
             client = null
             recorder = null
         }

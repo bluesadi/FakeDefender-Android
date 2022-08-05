@@ -20,11 +20,17 @@ import kotlinx.coroutines.withContext
 object RiskLevelManager {
 
     val globalRiskLevel: RiskLevel
-        get() = getAppInfo(UStatsUtil.getRunningApp() ?: "")?.riskLevel
-            ?: RiskLevel.NO_RISK
+        get() {
+            var riskLevel = getAppInfo(UStatsUtil.getRunningApp() ?: "")?.riskLevel
+                ?: RiskLevel.NO_RISK
+            if (riskLevel == RiskLevel.HIGH_RISK && sensitive){
+                riskLevel = RiskLevel.EXTREME_HIGH_RISK
+            }
+            return riskLevel
+        }
     var sensitive = false
 
-    var appInfoList = mutableListOf<AppInfo>()
+    private var appInfoList = mutableListOf<AppInfo>()
     val sortedAppInfoList: MutableList<AppInfo>
         get() {
             appInfoList.sortByDescending { info -> info.riskLevel }

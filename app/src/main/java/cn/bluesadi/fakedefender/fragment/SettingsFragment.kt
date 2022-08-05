@@ -34,6 +34,7 @@ class SettingsFragment : BaseHomeFragment<FragmentSettingsBinding>() {
             adapter = FragmentAdapter<BaseTabFragment>(childFragmentManager).apply {
                 addFragment(GeneralSettingsFragment(), getString(R.string.general_settings))
                 addFragment(AlarmSettingsFragment(), getString(R.string.alarm_settings))
+                addFragment(AdvancedSettingsFragment(), getString(R.string.advanced_settings))
                 addFragment(SceneSettingsFragment(), getString(R.string.scene_settings))
             }
         }

@@ -22,8 +22,6 @@ class JsonRequestWithCookie(
         response?.headers?.takeIf{ it.containsKey(SET_COOKIE_KEY) }?.let { headers ->
             Config.cookie = headers[SET_COOKIE_KEY]
         }
-        println("DEBUG: " + response?.headers)
-        println("DEBUG2: " + Config.cookie)
         return super.parseNetworkResponse(response)
     }
 
