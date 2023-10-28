@@ -9,7 +9,7 @@ $ ./gradlew build
 
 ## Directories
 - [FakeDefenderApp.kt](https://github.com/bluesadi/FakeDefender-Android/tree/master/app/src/main/java/cn/bluesadi/fakedefender/FakeDefenderApp.kt): App entrance
-- 
+
 - [activity](https://github.com/bluesadi/FakeDefender-Android/tree/master/app/src/main/java/cn/bluesadi/fakedefender/activity): App activities
 
 - [adapter](https://github.com/bluesadi/FakeDefender-Android/tree/master/app/src/main/java/cn/bluesadi/fakedefender/adapter): List adapaters
